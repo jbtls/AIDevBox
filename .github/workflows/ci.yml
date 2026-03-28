@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ruby shellcheck
+
+      - name: Vagrantfile syntax check
+        run: ruby -c Vagrantfile
+
+      - name: Extract and lint shell scripts
+        run: |
+          ruby << 'RUBY'
+            vagrantfile = File.read("Vagrantfile")
+            scripts = vagrantfile.scan(/<<~['"]?SHELL['"]?\n(.*?)\n\s*SHELL/m).flatten
+            scripts.each_with_index do |script, i|
+              File.write("/tmp/script_#{i}.sh", "#!/bin/bash\n" + script)
+            end
+          RUBY
+          shellcheck /tmp/script_*.sh
+
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Secrets check
+        run: |
+          if [ -f .gitignore ] && grep -q "\.env" .gitignore; then
+            echo ".env is properly gitignored"
+          else
+            echo "ERROR: .env is not gitignored"
+            exit 1
+          fi
+
+          if git diff --cached --name-only | grep -q "\.env$"; then
+            echo "ERROR: .env file is staged for commit"
+            exit 1
+          fi
+
+          if grep -r "GH_TOKEN=\|OPENROUTER_API_KEY=" --include="*.sh" --include="*.rb" --include="*.yml" --include="*.yaml" . 2>/dev/null | grep -v ".git" | grep -v "env.template" | grep -qv "env.template"; then
+            echo "WARNING: Potential secret pattern found (excluding .env.template)"
+          fi
+
+      - name: Template check
+        run: |
+          if [ ! -f .env.template ]; then
+            echo "ERROR: .env.template not found"
+            exit 1
+          fi
+
+          if ! grep -q "GH_TOKEN" .env.template; then
+            echo "ERROR: .env.template missing GH_TOKEN"
+            exit 1
+          fi
+
+          if ! grep -q "OPENROUTER_API_KEY" .env.template; then
+            echo "ERROR: .env.template missing OPENROUTER_API_KEY"
+            exit 1
+          fi
+
+          echo "Template validation passed"

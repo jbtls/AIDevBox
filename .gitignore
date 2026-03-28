@@ -1,0 +1,10 @@
+# Vagrant
+.vagrant/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Opencode
+opencode.json
