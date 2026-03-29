@@ -76,7 +76,7 @@ Vagrant.configure("2") do |config|
     vb.cpus   = 4
   end
 
-  config.vm.synced_folder ".", "/project"
+  config.vm.synced_folder "./project", "/project"
 
   # --- Base provisioning (root) ---
   config.vm.provision "shell", privileged: true, inline: <<~'SHELL'
