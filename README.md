@@ -37,8 +37,6 @@ AIDevBox/
 ├── README.md            # This file
 └── project/             # Your coding workspace — synced to /project in the VM
     ├── README.md        # Workspace notes
-    └── .github/
-        └── copilot-instructions.md  # In-VM agent instructions
 ```
 
 The `project/` subfolder is the **only** directory shared with the VM. The `Vagrantfile` and all other repository files remain on your host machine and are never accessible inside the VM. This prevents AI coding agents from reading or modifying the VM configuration.
@@ -53,9 +51,6 @@ vagrant up
 
 # SSH into the VM
 vagrant ssh
-
-# Inside the VM, your project files are at /project
-cd /project
 
 # Work on your code normally — changes sync automatically
 # Note: the Vagrantfile is NOT visible inside the VM
