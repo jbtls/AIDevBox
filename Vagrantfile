@@ -147,17 +147,6 @@ Vagrant.configure("2") do |config|
         # shellcheck disable=SC2016
         grep -qxF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc || \
           echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-
-        # Copilot instructions
-        mkdir -p /project/.github
-        if [ ! -f /project/.github/copilot-instructions.md ]; then
-          cat > /project/.github/copilot-instructions.md <<'EOF'
-## Protected files – do not modify and ignore
-- `Vagrantfile`
-- `.vagrant/`
-- `*.pem`, `*.key`, `.env`, `secrets.*`
-EOF
-        fi
       fi
 
       # --- OpenCode setup ---
