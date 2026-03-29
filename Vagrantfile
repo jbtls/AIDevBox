@@ -76,7 +76,7 @@ Vagrant.configure("2") do |config|
     vb.cpus   = 4
   end
 
-  config.vm.synced_folder ".", "/project"
+  config.vm.synced_folder "./project", "/project"
 
   # --- Base provisioning (root) ---
   config.vm.provision "shell", privileged: true, inline: <<~'SHELL'
@@ -147,17 +147,6 @@ Vagrant.configure("2") do |config|
         # shellcheck disable=SC2016
         grep -qxF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc || \
           echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-
-        # Copilot instructions
-        mkdir -p /project/.github
-        if [ ! -f /project/.github/copilot-instructions.md ]; then
-          cat > /project/.github/copilot-instructions.md <<'EOF'
-## Protected files – do not modify and ignore
-- `Vagrantfile`
-- `.vagrant/`
-- `*.pem`, `*.key`, `.env`, `secrets.*`
-EOF
-        fi
       fi
 
       # --- OpenCode setup ---

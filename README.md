@@ -3,6 +3,7 @@
 [![Vibecoded](https://img.shields.io/badge/vibecoded-yes-blue.svg)](#)
 [![Testing Only](https://img.shields.io/badge/testing-only-orange.svg)](#)
 [![Not for Production](https://img.shields.io/badge/not_for_production-red.svg)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## ⚠️ Disclaimer
 
@@ -26,9 +27,23 @@ AI Dev Box sets up a ready-to-use Ubuntu virtual machine with AI coding assistan
 - **OpenCode** — AI coding assistant via OpenRouter
 - **GitHub Copilot CLI** — GitHub's command-line AI pair programmer
 
+## Repository Structure
+
+```
+AIDevBox/
+├── Vagrantfile          # VM configuration (not visible inside the VM)
+├── .env.template        # Environment variables template
+├── LICENSE              # MIT License
+├── README.md            # This file
+└── project/             # Your coding workspace — synced to /project in the VM
+    ├── README.md        # Workspace notes
+```
+
+The `project/` subfolder is the **only** directory shared with the VM. The `Vagrantfile` and all other repository files remain on your host machine and are never accessible inside the VM. This prevents AI coding agents from reading or modifying the VM configuration.
+
 ## How to Develop
 
-The folder containing the `Vagrantfile` is synced to `/project` inside the VM. Changes made on your host machine are immediately available inside the VM.
+The `project/` folder is synced to `/project` inside the VM. Place your code there — changes made on your host machine are immediately available inside the VM, and vice versa.
 
 ```bash
 # Start the VM
@@ -37,10 +52,8 @@ vagrant up
 # SSH into the VM
 vagrant ssh
 
-# Inside the VM, your project files are at /project
-cd /project
-
 # Work on your code normally — changes sync automatically
+# Note: the Vagrantfile is NOT visible inside the VM
 
 # When done, suspend or halt the VM
 vagrant suspend   # saves state, faster startup
@@ -70,6 +83,8 @@ cp .env.template .env
 # Start the virtual machine
 vagrant up
 ```
+
+> **Tip:** Put your project code inside the `project/` folder — that is the workspace shared with the VM.
 
 ## Configuration
 
@@ -153,12 +168,6 @@ Adjust based on your host machine:
 
 Edit the `vb.memory` and `vb.cpus` values in `Vagrantfile` to adjust.
 
-## MIT License
+## License
 
-Copyright © 2026
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
