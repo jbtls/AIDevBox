@@ -12,9 +12,6 @@ vagrant up
 
 # SSH into the VM
 vagrant ssh
-
-# Your files are at /project inside the VM
-cd /project
 ```
 
 ## Notes
