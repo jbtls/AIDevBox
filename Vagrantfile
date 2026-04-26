@@ -71,6 +71,9 @@ Vagrant.configure("2") do |config|
   config.vm.box      = "ubuntu/jammy64"
   config.vm.hostname = "dev-env"
 
+  # vagrant-vbguest 0.32.0 crashes on Ruby 3.2+ (File.exists? removed)
+  config.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
+
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 4096
     vb.cpus   = 4
